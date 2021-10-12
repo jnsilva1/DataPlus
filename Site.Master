@@ -38,6 +38,7 @@
                 <%--Site Scripts--%>
             </Scripts>
         </asp:ScriptManager>
+        <%: Scripts.Render("~/bundles/inputmask") %>
 
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark ">
             <a class="navbar-brand" runat="server" href="~/">DataPlus</a>
@@ -52,12 +53,12 @@
                 </ul>
             </div>
         </nav>
-        <div class="container body-content">
+        <div class="container body-content pt-3">
             <asp:ContentPlaceHolder ID="MainContent" runat="server">
             </asp:ContentPlaceHolder>
             <hr />
             <footer>
-                <p>&copy; <%: DateTime.Now.Year %> - Meu aplicativo ASP.NET</p>
+                <p>&copy; <%: DateTime.Now.Year %> - PIM VIII</p>
             </footer>
         </div>
 
