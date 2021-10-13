@@ -10,6 +10,9 @@ namespace DataPlus.Registration
 {
     public partial class Insert : System.Web.UI.Page
     {
+        /// <summary>
+        /// Lista com os nomes dos estados brasileiros
+        /// </summary>
         private List<String> Estados = new List<string>
             {
                 "Acre",
@@ -40,14 +43,41 @@ namespace DataPlus.Registration
                 ,"Sergipe"
                 ,"Tocantins"
             }.OrderBy(es => es).ToList();
+        private List<CadastroPessoaFisica.Telefone> LTelefones = new List<CadastroPessoaFisica.Telefone>();
+
         protected void Page_Load(object sender, EventArgs e)
         {
+            LTelefones.Add(new CadastroPessoaFisica.Telefone { Ddd = 11, Numero = 952311101, Tipo = new CadastroPessoaFisica.TipoTelefone { Tipo = "Celular" } });
+            LTelefones.Add(new CadastroPessoaFisica.Telefone { Ddd = 11, Numero = 48546523, Tipo = new CadastroPessoaFisica.TipoTelefone { Tipo = "Fixo" } });
+            LTelefones.Add(new CadastroPessoaFisica.Telefone { Ddd = 85, Numero = 963690832, Tipo = new CadastroPessoaFisica.TipoTelefone { Tipo = "Celular" } });
+
             Id.Enabled = false;
             Endereco_Estado.DataSource = CreateDataSource();
             Endereco_Estado.DataTextField = "Text";
             Endereco_Estado.DataValueField = "Value";
             Endereco_Estado.DataBind();
             Endereco_Estado.SelectedIndex = 0;
+            Telefones.DataSource = CreateTelefoneSource();
+            Telefones.DataBind();
+        }
+
+        private System.Collections.ICollection CreateTelefoneSource()
+        {
+            DataTable dt = new DataTable();
+            dt.Columns.Add(new DataColumn("DDD", typeof(int)));
+            dt.Columns.Add(new DataColumn("Numero", typeof(int)));
+            dt.Columns.Add(new DataColumn("Tipo", typeof(string)));
+
+            LTelefones.ForEach(telefone => {
+                DataRow row = dt.NewRow();
+                row[0] = telefone.Ddd;
+                row[1] = telefone.Numero;
+                row[2] = telefone.Tipo.Tipo;
+
+                dt.Rows.Add(row);
+            });
+
+            return new DataView(dt);
         }
 
         private System.Collections.ICollection CreateDataSource()

@@ -86,6 +86,45 @@
                 </div>
             </div>
         </div>
+
+        <div class="card card-primary mb-3">
+            <div class="card-header bg-primary text-white">
+                Contato
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-3 col-md-2">
+                        <div class="form-group">
+                            <label for="MainContent_Telefone_DDD">DDD</label>
+                            <asp:TextBox CssClass="form-control" ID="Telefone_DDD" runat="server" MaxLength="3"></asp:TextBox>
+                        </div>
+                    </div>
+                    <div class="col-9 col-md-4">
+                        <div class="form-group">
+                            <label for="MainContent_Telefone_Numero">Número</label>
+                            <asp:TextBox CssClass="form-control" ID="Telefone_Numero" runat="server" MaxLength="9"></asp:TextBox>
+                        </div>
+                    </div>
+                    <div class="col-8 col-md-4">
+                        <div class="form-group">
+                            <label for="MainContent_Telefone_Tipo">Tipo</label>
+                            <asp:DropDownList ID="Telefone_Tipo" CssClass="custom-select" runat="server" />
+                        </div>
+                    </div>
+                    <div class="col-4 col-md-2">
+                        <div class="form-group">
+                            <label for="btn_adicionar_telefone" > </label>
+                            <button type="button" class="btn btn-primary btn-block mt-1" id="btn_adicionar_telefone">+ Adicionar</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <asp:GridView runat="server" ID="Telefones" />
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     <script type="text/javascript" >
         $(function () {
