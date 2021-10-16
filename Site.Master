@@ -15,6 +15,7 @@
 
     <webopt:bundlereference runat="server" path="~/Content/css" />
     <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous">
 
 </head>
 <body>
@@ -47,9 +48,14 @@
             </button>
             <div class="collapse navbar-collapse" id="navbar-content-collapse">
                 <ul class="navbar-nav mr-auto">
-                    <li class="nav-item"><a class="nav-link" runat="server" href="~/">Página inicial</a></li>
-                    <li class="nav-item"><a class="nav-link" runat="server" href="~/About">Sobre</a></li>
-                    <li class="nav-item"><a class="nav-link" runat="server" href="~/Contact">Contato</a></li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" runat="server" href="#" role="button" aria-haspopup="true">Cadastros</a>
+                        <div class="dropdown-menu">
+                            <a href="~/Registration/Index.aspx" class="dropdown-item" runat="server">Pessoa Física</a>
+                        </div>
+                    </li>
+                    <%--<li class="nav-item"><a class="nav-link" runat="server" href="~/About">Sobre</a></li>
+                    <li class="nav-item"><a class="nav-link" runat="server" href="~/Contact">Contato</a></li>--%>
                 </ul>
             </div>
         </nav>

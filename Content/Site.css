@@ -10,16 +10,25 @@ body {
     padding-right: 15px;
 }
 
-.nav-tabs .nav-link.active, .nav-tabs .nav-item.show .nav-link {
-    color: white;
-    background-color: #007bff;
-    border-color: #dee2e6 #dee2e6 #f8f8ff;
+.nav.nav-tabs {
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
 }
+    .nav.nav-tabs li.nav-item:first-of-type, .nav.nav-tabs li.nav-item:first-of-type a.nav-link {
+        border-top-left-radius: 10px;
+    }
+
+    .nav-tabs .nav-link.active, .nav-tabs .nav-item.show .nav-link {
+        color: white;
+        background-color: #007bff;
+        border-color: #dee2e6 #dee2e6 #f8f8ff;
+    }
 
 .tab-content {
     border-color: #007bff !important;
     border-radius: 10px;
     border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
     position: sticky;
 }
 
