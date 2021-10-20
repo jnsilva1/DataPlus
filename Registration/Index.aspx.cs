@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CadastroPessoaFisica;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -10,6 +11,7 @@ namespace DataPlus.Registration
 {
     public partial class Insert : System.Web.UI.Page
     {
+        internal CadastroPessoaFisica.Pessoa CurrentPessoa { get; set; }
         /// <summary>
         /// Lista com os nomes dos estados brasileiros
         /// </summary>
@@ -43,39 +45,85 @@ namespace DataPlus.Registration
                 ,"Sergipe"
                 ,"Tocantins"
             }.OrderBy(es => es).ToList();
-        public List<CadastroPessoaFisica.Telefone> LTelefones = new List<CadastroPessoaFisica.Telefone>();
+
+        public ICollection<CadastroPessoaFisica.Telefone> TelefonesDaPessoa => this.CurrentPessoa.Telefones;
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            LTelefones.Add(new CadastroPessoaFisica.Telefone { Ddd = 11, Numero = 952311101, Tipo = new CadastroPessoaFisica.TipoTelefone { Tipo = "Celular" } });
-            LTelefones.Add(new CadastroPessoaFisica.Telefone { Ddd = 11, Numero = 48546523, Tipo = new CadastroPessoaFisica.TipoTelefone { Tipo = "Fixo" } });
-            LTelefones.Add(new CadastroPessoaFisica.Telefone { Ddd = 85, Numero = 963690832, Tipo = new CadastroPessoaFisica.TipoTelefone { Tipo = "Celular" } });
-
-            Endereco_Estado.DataSource = CreateDataSource();
-            Endereco_Estado.DataTextField = "Text";
-            Endereco_Estado.DataValueField = "Value";
-            Endereco_Estado.DataBind();
-            Endereco_Estado.SelectedIndex = 0;
-
+            
+            this.CurrentPessoa = new Pessoa();
+            this.CurrentPessoa.Telefones = new HashSet<Telefone>();
             if (IsPostBack ==  false)
             {
-                Telefones.DataSource = CreateTelefoneSource();
-                Telefones.DataBind();
+                BindDropdownListEstados();
+                BindGridViewTelefones();
+            }
+            else
+            {
+                //ProcessEvent(target: Request["__EVENTTARGET"], argument: Request["__EVENTARGUMENT"]);
             }
 
+
             btn_adicionar_telefone.Click += (object cSender, EventArgs cE) => {
-                AtualizaTelefones();
+                AdicionarTelefone();
             };
+
+            Telefones.RowDeleting += Telefones_RowDeleting;
+            Cpf.TextChanged += Cpf_TextChanged;
         }
 
-        private System.Collections.ICollection CreateTelefoneSource()
+        private void Cpf_TextChanged(object sender, EventArgs e)
+        {
+            if(string.IsNullOrEmpty(value: Cpf.Text) == false)
+            {
+                if (long.TryParse(Cpf.Text.Replace(".", "").Replace("-", "").Replace("_", ""), out long cpf))
+                {
+                    this.CurrentPessoa = PessoaDAO.Consulte(cpf) ?? new Pessoa();
+                    this.PopulatePessoa();
+                }
+            }
+        }
+
+        private void PopulatePessoa()
+        {
+            Nome.Text = CurrentPessoa.Nome;
+            //TODO: Finalizar método que popula a pessoa.
+        }
+
+        private void Telefones_RowDeleting(object sender, GridViewDeleteEventArgs e)
+        {
+            ResetTelefonesDaPessoa();
+            TelefonesDaPessoa.Remove(TelefonesDaPessoa.ElementAt(index: e.RowIndex));
+            BindGridViewTelefones();
+        }
+
+        private void BindDropdownListEstados()
+        {
+            DataTable dt = new DataTable();
+            dt.Columns.Add(new DataColumn("Value", typeof(string)));
+            dt.Columns.Add(new DataColumn("Text", typeof(string)));
+
+            Estados.ForEach(estado => {
+                DataRow row = dt.NewRow();
+                row[0] = row[1] = estado;
+                dt.Rows.Add(row);
+            });
+
+            Endereco_Estado.DataSource = new DataView(dt);
+            Endereco_Estado.DataTextField = "Text";
+            Endereco_Estado.DataValueField = "Value";
+            Endereco_Estado.SelectedIndex = 0;
+            Endereco_Estado.DataBind();
+        }
+
+        private void BindGridViewTelefones()
         {
             DataTable dt = new DataTable();
             dt.Columns.Add(new DataColumn("DDD", typeof(int)));
-            dt.Columns.Add(new DataColumn("Numero", typeof(int)));
+            dt.Columns.Add(new DataColumn("Número", typeof(int)));
             dt.Columns.Add(new DataColumn("Tipo", typeof(string)));
 
-            LTelefones.ForEach(telefone => {
+            TelefonesDaPessoa.ToList().ForEach(telefone => {
                 DataRow row = dt.NewRow();
                 row[0] = telefone.Ddd;
                 row[1] = telefone.Numero;
@@ -84,35 +132,53 @@ namespace DataPlus.Registration
                 dt.Rows.Add(row);
             });
 
-            return new DataView(dt);
-        }
-
-        private System.Collections.ICollection CreateDataSource()
-        {
-            DataTable dt = new DataTable();
-            dt.Columns.Add(new DataColumn("Value", typeof(string)));
-            dt.Columns.Add(new DataColumn("Text", typeof(string)));
-
-            Estados.ForEach(estado => dt.Rows.Add(CreateRow(value: estado, text:estado, dt: dt)));
-
-            return new DataView(dt);
-        }
-
-        private DataRow CreateRow(string value, string text, DataTable dt)
-        {
-            DataRow row = dt.NewRow();
-            row[0] = value;
-            row[1] = text;
-            return row;
-        }
-
-        protected void AtualizaTelefones()
-        {
-            LTelefones.Add(new CadastroPessoaFisica.Telefone { Ddd = 85, Numero = 65324565, Tipo = new CadastroPessoaFisica.TipoTelefone { Tipo = "Fixo" } });
-            Telefones.DataSource = null;
+            Telefones.DataSource = new DataView(dt);
             Telefones.DataBind();
-            Telefones.DataSource = CreateTelefoneSource();
-            Telefones.DataBind();
+        }
+
+        private void AdicionarTelefone()
+        {
+            int.TryParse((Telefone_DDD.Text ?? "").Replace("(", "").Replace(")", "").Replace("_", ""), out int ddd);
+            int.TryParse((Telefone_Numero.Text ?? "").Replace(".", "").Replace("-", "").Replace("_", ""), out int numero);
+
+            if (ddd > 0 &&
+                (numero > 0 && numero.ToString().Length >= 8 && numero.ToString().Length <= 9) &&
+                string.IsNullOrEmpty(Telefone_Tipo.Text) == false 
+                )
+            {
+                ResetTelefonesDaPessoa();
+                this.TelefonesDaPessoa.Add(new Telefone { Ddd = ddd, Numero = numero, Tipo = new TipoTelefone { Tipo = Telefone_Tipo.Text } });
+                BindGridViewTelefones();
+                Telefone_DDD.Text = Telefone_Numero.Text = Telefone_Tipo.Text = "";
+            }
+        }
+
+        internal void RemovePhone(int index)
+        {
+
+        }
+
+        private void ResetTelefonesDaPessoa()
+        {
+            foreach(GridViewRow row in this.Telefones.Rows)
+            {
+                TelefonesDaPessoa.Add(new Telefone { Ddd = Convert.ToInt32(row.Cells[1].Text), Numero = Convert.ToInt32(row.Cells[2].Text), Tipo = new TipoTelefone { Tipo = row.Cells[3].Text } });
+            }
+        }
+
+        private void ProcessEvent(string target, string argument)
+        {
+            if (target.ToUpper().Contains("$TELEFONES"))
+            {
+                if((argument ?? "").ToUpper().Contains("DELETE$"))
+                {
+                    if (int.TryParse(argument.Split('$')[1], out int index))
+                    {
+                        if(index >= 0 && index < TelefonesDaPessoa.Count)
+                            TelefonesDaPessoa.Remove(TelefonesDaPessoa.ElementAt(index: index));
+                    }
+                }
+            }
         }
     }
 }

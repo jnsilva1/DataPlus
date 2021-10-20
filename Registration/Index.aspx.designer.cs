@@ -111,7 +111,7 @@ namespace DataPlus.Registration
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList Telefone_Tipo;
+        protected global::System.Web.UI.WebControls.TextBox Telefone_Tipo;
 
         /// <summary>
         /// btn_adicionar_telefone control.

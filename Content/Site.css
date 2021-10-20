@@ -10,6 +10,20 @@ body {
     padding-right: 15px;
 }
 
+.hide{
+    display: none;
+    visibility: hidden;
+}
+
+.btn-times{
+    font-size:x-small;
+}
+
+.show {
+    display: inline-block;
+    display: flex;
+}
+
 .nav.nav-tabs {
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
