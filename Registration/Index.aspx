@@ -26,7 +26,11 @@
                         <div class="col-12 col-md-4">
                             <div class="form-group">
                                 <label for="Cpf">CPF</label>
-                                <asp:TextBox CssClass="form-control" ID="Cpf" runat="server" MaxLength="15"></asp:TextBox>
+                                <asp:UpdatePanel runat="server">
+                                    <ContentTemplate>
+                                        <asp:TextBox CssClass="form-control" ID="Cpf" runat="server" MaxLength="15" AutoPostBack="True"></asp:TextBox>
+                                    </ContentTemplate>
+                                </asp:UpdatePanel>
                             </div>
                         </div>
                     </div>

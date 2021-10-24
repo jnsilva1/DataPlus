@@ -76,10 +76,15 @@ namespace DataPlus.Registration
         {
             if(string.IsNullOrEmpty(value: Cpf.Text) == false)
             {
-                if (long.TryParse(Cpf.Text.Replace(".", "").Replace("-", "").Replace("_", ""), out long cpf))
+                string txtCpf = Cpf.Text.Replace(".", "").Replace("-", "").Replace("_", "");
+                if (txtCpf.Length == 11)
                 {
-                    this.CurrentPessoa = PessoaDAO.Consulte(cpf) ?? new Pessoa();
-                    this.PopulatePessoa();
+                    if (long.TryParse(txtCpf, out long cpf))
+                    {
+                        ConnectionSettings.SetConnectionString(connectionString: System.Configuration.ConfigurationManager.ConnectionStrings["DEFAULT"].ConnectionString);
+                        this.CurrentPessoa = PessoaDAO.Consulte(cpf) ?? new Pessoa();
+                        this.PopulatePessoa();
+                    }
                 }
             }
         }
@@ -87,7 +92,15 @@ namespace DataPlus.Registration
         private void PopulatePessoa()
         {
             Nome.Text = CurrentPessoa.Nome;
-            //TODO: Finalizar método que popula a pessoa.
+            Cpf.Text = CurrentPessoa.Cpf.ToString("000.000.000-00");
+            Endereco_Logradouro.Text = CurrentPessoa.Endereco.Logradouro;
+            Endereco_Numero.Text = CurrentPessoa.Endereco.Numero.ToString("00");
+            Endereco_Cep.Text = CurrentPessoa.Endereco.Cep.ToString("00.000-000");
+            Endereco_Bairro.Text = CurrentPessoa.Endereco.Bairro;
+            Endereco_Cidade.Text = CurrentPessoa.Endereco.Cidade;
+            BindDropdownListEstados();
+            Endereco_Estado.SelectedValue =  CurrentPessoa.Endereco.Estado;
+            BindGridViewTelefones();
         }
 
         private void Telefones_RowDeleting(object sender, GridViewDeleteEventArgs e)
@@ -163,21 +176,6 @@ namespace DataPlus.Registration
             foreach(GridViewRow row in this.Telefones.Rows)
             {
                 TelefonesDaPessoa.Add(new Telefone { Ddd = Convert.ToInt32(row.Cells[1].Text), Numero = Convert.ToInt32(row.Cells[2].Text), Tipo = new TipoTelefone { Tipo = row.Cells[3].Text } });
-            }
-        }
-
-        private void ProcessEvent(string target, string argument)
-        {
-            if (target.ToUpper().Contains("$TELEFONES"))
-            {
-                if((argument ?? "").ToUpper().Contains("DELETE$"))
-                {
-                    if (int.TryParse(argument.Split('$')[1], out int index))
-                    {
-                        if(index >= 0 && index < TelefonesDaPessoa.Count)
-                            TelefonesDaPessoa.Remove(TelefonesDaPessoa.ElementAt(index: index));
-                    }
-                }
             }
         }
     }
