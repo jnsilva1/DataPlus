@@ -11,79 +11,83 @@
     </ul>
     <div class="tab-content border-1 border">
         <div class="tab-pane p-3 active" role="tabpanel" aria-labelledby="tab-1-tab" id="tab-1">
-            <div class="card card-ligth mb-3">
-                <div class="card-header">
-                    Dados Pessoais
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-12 col-md-8">
-                            <div class="form-group">
-                                <label for="Nome">Nome</label>
-                                <asp:TextBox CssClass="form-control" ID="Nome" runat="server" MaxLength="256" ></asp:TextBox>
-                            </div>
+            <asp:UpdatePanel runat="server">
+                <ContentTemplate>
+                    <div class="card card-ligth mb-3">
+                        <div class="card-header">
+                            Dados Pessoais
                         </div>
-                        <div class="col-12 col-md-4">
-                            <div class="form-group">
-                                <label for="Cpf">CPF</label>
-                                <asp:UpdatePanel runat="server">
-                                    <ContentTemplate>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-12 col-md-8">
+                                    <div class="form-group">
+                                        <label for="Nome">Nome</label>
+                                        <asp:TextBox CssClass="form-control" ID="Nome" runat="server" MaxLength="256"></asp:TextBox>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-4">
+                                    <div class="form-group">
+                                        <label for="Cpf">CPF</label>
                                         <asp:TextBox CssClass="form-control" ID="Cpf" runat="server" MaxLength="15" AutoPostBack="True"></asp:TextBox>
-                                    </ContentTemplate>
-                                </asp:UpdatePanel>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
-            <div class="card card-primary mb-3">
-                <div class="card-header bg-primary text-white">
-                    Endereço
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-12 col-md-9">
-                            <div class="form-group">
-                                <label for="Endereco_Logradouro">Logradouro</label>
-                                <asp:TextBox CssClass="form-control" ID="Endereco_Logradouro" runat="server" MaxLength="256"></asp:TextBox>
-                            </div>
-                        </div>
-                        <div class="col-12 col-md-3">
-                            <div class="form-group">
-                                <label for="Endereco_Numero">Número</label>
-                                <asp:TextBox CssClass="form-control" ID="Endereco_Numero" runat="server" TextMode="Number"></asp:TextBox>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-12 col-md-2">
-                            <div class="form-group">
-                                <label for="Endereco_Cep">CEP</label>
-                                <asp:TextBox CssClass="form-control" ID="Endereco_Cep" runat="server"></asp:TextBox>
-                            </div>
+
+                    <div class="card card-primary mb-3">
+                        <div class="card-header bg-primary text-white">
+                            Endereço
                         </div>
-                        <div class="col-12 col-md-4">
-                            <div class="form-group">
-                                <label for="Endereco_Bairro">Bairro</label>
-                                <asp:TextBox CssClass="form-control" ID="Endereco_Bairro" runat="server" MaxLength="50"></asp:TextBox>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-12 col-md-9">
+                                    <div class="form-group">
+                                        <label for="Endereco_Logradouro">Logradouro</label>
+                                        <asp:TextBox CssClass="form-control" ID="Endereco_Logradouro" runat="server" MaxLength="256"></asp:TextBox>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-3">
+                                    <div class="form-group">
+                                        <label for="Endereco_Numero">Número</label>
+                                        <asp:TextBox CssClass="form-control" ID="Endereco_Numero" runat="server" TextMode="Number"></asp:TextBox>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-12 col-md-3">
-                            <div class="form-group">
-                                <label for="Endereco_Cidade">Cidade</label>
-                                <asp:TextBox CssClass="form-control" ID="Endereco_Cidade" runat="server" MaxLength="30"></asp:TextBox>
-                            </div>
-                        </div>
-                        <div class="col-12 col-md-3">
-                            <div class="form-group">
-                                <label for="Endereco_Estado">Estado</label>
-                                <asp:DropDownList ID="Endereco_Estado" CssClass="custom-select" runat="server" />
+                            <div class="row">
+                                <div class="col-12 col-md-2">
+                                    <div class="form-group">
+                                        <label for="Endereco_Cep">CEP</label>
+                                        <asp:TextBox CssClass="form-control" ID="Endereco_Cep" runat="server"></asp:TextBox>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-4">
+                                    <div class="form-group">
+                                        <label for="Endereco_Bairro">Bairro</label>
+                                        <asp:TextBox CssClass="form-control" ID="Endereco_Bairro" runat="server" MaxLength="50"></asp:TextBox>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-3">
+                                    <div class="form-group">
+                                        <label for="Endereco_Cidade">Cidade</label>
+                                        <asp:TextBox CssClass="form-control" ID="Endereco_Cidade" runat="server" MaxLength="30"></asp:TextBox>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-3">
+                                    <div class="form-group">
+                                        <label for="Endereco_Estado">Estado</label>
+                                        <asp:DropDownList ID="Endereco_Estado" CssClass="custom-select" runat="server" />
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
+                </ContentTemplate>
+                <Triggers>
+                    <asp:AsyncPostBackTrigger ControlID="Cpf" EventName="TextChanged" />
+                </Triggers>
+            </asp:UpdatePanel>
 
             <div class="card card-primary mb-3">
                 <div class="card-header bg-primary text-white">
@@ -194,6 +198,8 @@
                     if (value.length < 9)
                         $(this).inputmask('remove').inputmask('9999-9999');
                 }).focusin(function () { $(this).inputmask('remove').inputmask('9.9999-9999'); }).inputmask('9.9999-9999');
+                $('#MainContent_Cpf').inputmask('999.999.999-99');
+                $('#MainContent_Endereco_Cep').inputmask('99.999-999');
                 $('#MainContent_Telefones').find('tr').each(function (index) {
                     if (index == 0)
                         $(this).find('th:first').insertAfter($(this).find('th:last'))
@@ -209,12 +215,12 @@
             return false;
         }
         $(function () {
-            $('#MainContent_Cpf').inputmask('999.999.999-99');
-            $('#MainContent_Endereco_Cep').inputmask('99.999-999');
             AjustaCardContatoLayout();
             Sys.WebForms.PageRequestManager._instance.add_pageLoaded(function () {
                 AjustaCardContatoLayout();
             })
         });
+          
+        
     </script>
 </asp:Content>

@@ -70,10 +70,57 @@ namespace DataPlus.Registration
 
             Telefones.RowDeleting += Telefones_RowDeleting;
             Cpf.TextChanged += Cpf_TextChanged;
+            btnSave.ServerClick += GravarPessoa;
+            btnClean.ServerClick += LimparTela;
+        }
+
+        private void LimparTela(object sender, EventArgs e)
+        {
+            LimparTela();
+        }
+
+        private void GravarPessoa(object sender, EventArgs e)
+        {
+            bool insercao = false, sucesso= false;
+            long.TryParse(Cpf.Text.Replace(".", "").Replace("-", "").Replace("_", ""), out long cpf);
+            CurrentPessoa = PessoaDAO.Consulte(cpf) ?? new Pessoa();
+            insercao = CurrentPessoa.Cpf == 0;
+            CurrentPessoa.Nome = Nome.Text;
+            CurrentPessoa.Cpf = cpf;
+            int.TryParse(Endereco_Cep.Text.Replace(".", "").Replace("-", "").Replace("_", ""), out int cep);
+            int.TryParse(Endereco_Numero.Text.Replace(".", "").Replace("-", "").Replace("_", ""), out int numero);
+
+            CurrentPessoa.Endereco = new Endereco()
+            {
+                Cep = cep,
+                Logradouro = Endereco_Logradouro.Text,
+                Numero = numero,
+                Cidade = Endereco_Cidade.Text,
+                Bairro = Endereco_Bairro.Text,
+                Estado = Endereco_Estado.SelectedValue
+            };
+            ResetTelefonesDaPessoa();
+            if (insercao)
+            {
+                sucesso = PessoaDAO.Insira(p: CurrentPessoa);
+            }
+            else
+            {
+                sucesso = PessoaDAO.Altere(p: CurrentPessoa);
+            }
+            if (sucesso)
+                LimparTela();
+        }
+
+        private void LimparTela()
+        {
+            CurrentPessoa = new Pessoa();
+            PopulatePessoa();
         }
 
         private void Cpf_TextChanged(object sender, EventArgs e)
         {
+            if ((Request["__EVENTTARGET"] ?? "").ToLower().Contains("cpf") == false) return;
             if(string.IsNullOrEmpty(value: Cpf.Text) == false)
             {
                 string txtCpf = Cpf.Text.Replace(".", "").Replace("-", "").Replace("_", "");
@@ -81,8 +128,7 @@ namespace DataPlus.Registration
                 {
                     if (long.TryParse(txtCpf, out long cpf))
                     {
-                        ConnectionSettings.SetConnectionString(connectionString: System.Configuration.ConfigurationManager.ConnectionStrings["DEFAULT"].ConnectionString);
-                        this.CurrentPessoa = PessoaDAO.Consulte(cpf) ?? new Pessoa();
+                        this.CurrentPessoa = PessoaDAO.Consulte(cpf) ?? new Pessoa() {Cpf = cpf };
                         this.PopulatePessoa();
                     }
                 }
@@ -92,14 +138,15 @@ namespace DataPlus.Registration
         private void PopulatePessoa()
         {
             Nome.Text = CurrentPessoa.Nome;
-            Cpf.Text = CurrentPessoa.Cpf.ToString("000.000.000-00");
+            Cpf.Text = CurrentPessoa.Cpf > 0 ? CurrentPessoa.Cpf.ToString("000.000.000-00") : "";
             Endereco_Logradouro.Text = CurrentPessoa.Endereco.Logradouro;
-            Endereco_Numero.Text = CurrentPessoa.Endereco.Numero.ToString("00");
-            Endereco_Cep.Text = CurrentPessoa.Endereco.Cep.ToString("00.000-000");
+            Endereco_Numero.Text = CurrentPessoa.Endereco.Numero > 0 ? CurrentPessoa.Endereco.Numero.ToString("00") : "";
+            Endereco_Cep.Text = CurrentPessoa.Endereco.Cep > 0 ? CurrentPessoa.Endereco.Cep.ToString("00.000-000") :"";
             Endereco_Bairro.Text = CurrentPessoa.Endereco.Bairro;
             Endereco_Cidade.Text = CurrentPessoa.Endereco.Cidade;
             BindDropdownListEstados();
             Endereco_Estado.SelectedValue =  CurrentPessoa.Endereco.Estado;
+            Telefone_DDD.Text = Telefone_Numero.Text = Telefone_Tipo.Text = "";
             BindGridViewTelefones();
         }
 
@@ -166,13 +213,9 @@ namespace DataPlus.Registration
             }
         }
 
-        internal void RemovePhone(int index)
-        {
-
-        }
-
         private void ResetTelefonesDaPessoa()
         {
+            CurrentPessoa.Telefones = new HashSet<Telefone>();
             foreach(GridViewRow row in this.Telefones.Rows)
             {
                 TelefonesDaPessoa.Add(new Telefone { Ddd = Convert.ToInt32(row.Cells[1].Text), Numero = Convert.ToInt32(row.Cells[2].Text), Tipo = new TipoTelefone { Tipo = row.Cells[3].Text } });
