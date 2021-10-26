@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" Title="Cadastro" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Index.aspx.cs" Inherits="DataPlus.Registration.Insert" ViewStateEncryptionMode="Never" %>
+﻿<%@ Page Language="C#" Title="Cadastro" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Index.aspx.cs" Inherits="DataPlus.Registration.Insert" ViewStateEncryptionMode="Never" ValidateRequest="True" %>
 
 <asp:Content  ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
     <ul class="nav nav-tabs border-bottom-0 bg-dark border border-primary font-weight-bold" role="tablist">
@@ -22,13 +22,13 @@
                                 <div class="col-12 col-md-8">
                                     <div class="form-group">
                                         <label for="Nome">Nome</label>
-                                        <asp:TextBox CssClass="form-control" ID="Nome" runat="server" MaxLength="256"></asp:TextBox>
+                                        <asp:TextBox CssClass="form-control" ID="Nome" runat="server" MaxLength="256" required="required" CausesValidation="True" ValidateRequestMode="Enabled"></asp:TextBox>
                                     </div>
                                 </div>
                                 <div class="col-12 col-md-4">
                                     <div class="form-group">
                                         <label for="Cpf">CPF</label>
-                                        <asp:TextBox CssClass="form-control" ID="Cpf" runat="server" MaxLength="15" AutoPostBack="True"></asp:TextBox>
+                                        <asp:TextBox CssClass="form-control" ID="Cpf" runat="server" MaxLength="15" required="required" AutoPostBack="True" CausesValidation="True" ValidateRequestMode="Enabled"></asp:TextBox>
 
                                     </div>
                                 </div>
@@ -145,8 +145,7 @@
                                 <button id="btnSave"  runat="server" type="button" class="btn btn-primary font-weight-bold">
                                     <i class="fa fa-save"></i> Gravar</button>
                                 <button id="btnClean"  runat="server" type="button" class="btn btn-primary font-weight-bold">
-                                    <i class="fa fa-file"></i> Limpar
-                                </button>
+                                    <i class="fa fa-file"></i> Limpar</button>
                                 <button id="btnDelete"  runat="server" type="button" class="btn btn-danger font-weight-bold">
                                     <i class="fa fa-trash"></i> Excluir
                                 </button>
@@ -219,6 +218,10 @@
             Sys.WebForms.PageRequestManager._instance.add_pageLoaded(function () {
                 AjustaCardContatoLayout();
             })
+
+            if ($.trim($('form').attr('response')))
+                window.alert($.trim($('form').attr('response')));
+            
         });
           
         

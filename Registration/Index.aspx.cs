@@ -72,6 +72,27 @@ namespace DataPlus.Registration
             Cpf.TextChanged += Cpf_TextChanged;
             btnSave.ServerClick += GravarPessoa;
             btnClean.ServerClick += LimparTela;
+            btnDelete.ServerClick += ExcluirPessoa;
+        }
+
+        private void ExcluirPessoa(object sender, EventArgs e)
+        {
+
+            long.TryParse(Cpf.Text.Replace(".", "").Replace("-", "").Replace("_", ""), out long cpf);
+            CurrentPessoa = PessoaDAO.Consulte(cpf);
+            bool sucesso = false;
+            if (CurrentPessoa != null)
+                sucesso = PessoaDAO.Exclua(p: CurrentPessoa);
+
+            if (sucesso)
+            {
+                Form.Attributes.Add("response", "Registro excluído com sucesso.");
+                LimparTela();
+            }
+            else
+            {
+                Form.Attributes.Add("response", "Ocorreu um erro ao excluir o registro!");
+            }
         }
 
         private void LimparTela(object sender, EventArgs e)
@@ -81,10 +102,10 @@ namespace DataPlus.Registration
 
         private void GravarPessoa(object sender, EventArgs e)
         {
-            bool insercao = false, sucesso= false;
+            Validate();
             long.TryParse(Cpf.Text.Replace(".", "").Replace("-", "").Replace("_", ""), out long cpf);
             CurrentPessoa = PessoaDAO.Consulte(cpf) ?? new Pessoa();
-            insercao = CurrentPessoa.Cpf == 0;
+            bool insercao = CurrentPessoa.Cpf == 0;
             CurrentPessoa.Nome = Nome.Text;
             CurrentPessoa.Cpf = cpf;
             int.TryParse(Endereco_Cep.Text.Replace(".", "").Replace("-", "").Replace("_", ""), out int cep);
@@ -100,6 +121,7 @@ namespace DataPlus.Registration
                 Estado = Endereco_Estado.SelectedValue
             };
             ResetTelefonesDaPessoa();
+            bool sucesso;
             if (insercao)
             {
                 sucesso = PessoaDAO.Insira(p: CurrentPessoa);
@@ -109,11 +131,19 @@ namespace DataPlus.Registration
                 sucesso = PessoaDAO.Altere(p: CurrentPessoa);
             }
             if (sucesso)
+            {
+                Form.Attributes.Add("response", "Registro gravado com sucesso.");
                 LimparTela();
+            }
+            else
+            {
+                Form.Attributes.Add("response", "Ocorreu um erro ao gravar o registro!");
+            }
         }
 
         private void LimparTela()
         {
+            Form.Attributes.Add("response", "");
             CurrentPessoa = new Pessoa();
             PopulatePessoa();
         }
