@@ -49,8 +49,8 @@
     <Reference Include="AspNet.ScriptManager.bootstrap, Version=4.6.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\AspNet.ScriptManager.bootstrap.4.6.0\lib\net45\AspNet.ScriptManager.bootstrap.dll</HintPath>
     </Reference>
-    <Reference Include="CadastroPessoaFisica, Version=1.0.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\CadastroPessoaFisica.1.0.1\lib\netstandard2.0\CadastroPessoaFisica.dll</HintPath>
+    <Reference Include="CadastroPessoaFisica, Version=1.0.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\CadastroPessoaFisica.1.0.3\lib\netstandard2.0\CadastroPessoaFisica.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
