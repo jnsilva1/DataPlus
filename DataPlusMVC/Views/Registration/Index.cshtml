@@ -1,0 +1,166 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<form name="Registration" id="Registration">
+    <ul class="nav nav-tabs border-bottom-0 bg-dark border border-primary font-weight-bold" role="tablist">
+        <li class="nav-item" role="presentation">
+            <a class="nav-link active" data-toggle="tab" role="tab" aria-controls="tab-1" href="#tab-1">Ficha de Cadastro</a>
+        </li>
+        @*<li class="nav-item" role="presentation">
+                <a class="nav-link" data-toggle="tab" role="tab" aria-controls="tab-2" href="#tab-2">Registros</a>
+            </li>*@
+    </ul>
+    <div class="tab-content border-1 border">
+        <div class="tab-pane p-3 active" role="tabpanel" aria-labelledby="tab-1-tab" id="tab-1">
+            <div class="card card-ligth mb-3">
+                <div class="card-header">
+                    Dados Pessoais
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-12 col-md-8">
+                            <div class="form-group">
+                                <label for="Nome">Nome</label>
+                                @Html.TextBox("Nome", "", new { maxlength="256", required="required", @class="form-control" })
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <div class="form-group">
+                                <label for="Cpf">CPF</label>
+                                @Html.TextBox("Cpf", "", new { maxlength = "15", required = "required", @class = "form-control" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card card-primary mb-3">
+                <div class="card-header bg-primary text-white">
+                    Endereço
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-12 col-md-9">
+                            <div class="form-group">
+                                <label for="Endereco_Logradouro">Logradouro</label>
+                                @Html.TextBox("Endereco_Logradouro", "", new { maxlength = "256", required = "required", @class = "form-control" })
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-3">
+                            <div class="form-group">
+                                <label for="Endereco_Numero">Número</label>
+                                @Html.TextBox("Endereco_Numero", "", new { type = "number", @class = "form-control" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 col-md-2">
+                            <div class="form-group">
+                                <label for="Endereco_Cep">CEP</label>
+                                @Html.TextBox("Endereco_Cep", "", new { maxlength = "30", required = "required", @class = "form-control" })
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <div class="form-group">
+                                <label for="Endereco_Bairro">Bairro</label>
+                                @Html.TextBox("Endereco_Bairro", "", new { maxlength = "50", required = "required", @class = "form-control" })
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-3">
+                            <div class="form-group">
+                                <label for="Endereco_Cidade">Cidade</label>
+                                @Html.TextBox("Endereco_Cidade", "", new { maxlength = "30", required = "required", @class = "form-control" })
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-3">
+                            <div class="form-group">
+                                <label for="Endereco_Estado">Estado</label>
+                                @Html.DropDownList("Endereco_Estado", DataPlusMVC.Controllers.RegistrationController.GetStates().Select(v=> new SelectListItem { Selected = false, Text = v, Value = v}), new { @class="custom-select"})
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card card-primary mb-3 card-phone-number">
+                <div class="card-header bg-primary text-white">
+                    Contato
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-3 col-md-2">
+                            <div class="form-group">
+                                <label for="Telefone_DDD">DDD</label>
+                                @Html.TextBox("Telefone_DDD", "", new { maxlength = "4", @class = "form-control", required="required" })
+                            </div>
+                        </div>
+                        <div class="col-9 col-md-4">
+                            <div class="form-group">
+                                <label for="Telefone_Numero">Número</label>
+                                @Html.TextBox("Telefone_Numero", "", new { maxlength = "20", @class = "form-control", required = "required" })
+                            </div>
+                        </div>
+                        <div class="col-8 col-md-4">
+                            <div class="form-group">
+                                <label for="Telefone_Tipo">Tipo</label>
+                                @Html.TextBox("Telefone_Tipo", "", new { @class= "form-control", maxlength="10", required = "required" })
+                            </div>
+                        </div>
+                        <div class="col-4 col-md-2">
+                            <div class="form-group">
+                                <label for="btn_adicionar_telefone"></label>
+                                <Button class="btn btn-primary btn-block mt-1 font-weight-bold" type="button" id="btn_adicionar_telefone" name="btn_adicionar_telefone">+ Adicionar</Button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <table id="phoneList" class="table table-hover table-bordered">
+                                <thead>
+                                    @*<tr>
+                                        <th scope="col">DDD</th>
+                                        <th scope="col">Número</th>
+                                        <th scope="col">Tipo</th>
+                                        <th scope="col"></th>
+                                    </tr>*@
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td colspan="4">Nenhum telefone foi adicionado...</td>
+                                        @*<td>11</td>
+                                        <td>963690832</td>
+                                        <td>Celular</td>
+                                        <td class="d-flex justify-content-center"><button type="button" class="btn btn-danger btn-remove-phone btn-times" title="Remover"><i class="fa fa-times"></i></button></td>*@
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card card-primary">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="btn-group">
+                                <button id="btnSave" type="button" formaction="Save" class="btn btn-primary font-weight-bold">
+                                    <i class="fa fa-save"></i> Gravar
+                                </button>
+                                <button id="btnClean" type="reset" class="btn btn-primary font-weight-bold">
+                                    <i class="fa fa-file"></i> Limpar
+                                </button>
+                                <button id="btnDelete" type="button" formaction="Delete" class="btn btn-danger font-weight-bold">
+                                    <i class="fa fa-trash"></i> Excluir
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<script type="text/javascript" src="@Url.Content("~/Scripts/Registration/Index.js?vs="+Guid.NewGuid())"></script>
