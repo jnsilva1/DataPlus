@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataPlus", "DataPlus.csproj
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataPlusMVC", "DataPlusMVC\DataPlusMVC.csproj", "{D076F759-8626-4307-8934-3698EA4A4C61}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataPlusMVCApp", "DataPlusMVCApp\DataPlusMVCApp.csproj", "{A8690297-61AF-402F-9496-9D5CEDCAE2ED}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{D076F759-8626-4307-8934-3698EA4A4C61}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D076F759-8626-4307-8934-3698EA4A4C61}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D076F759-8626-4307-8934-3698EA4A4C61}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A8690297-61AF-402F-9496-9D5CEDCAE2ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A8690297-61AF-402F-9496-9D5CEDCAE2ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A8690297-61AF-402F-9496-9D5CEDCAE2ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A8690297-61AF-402F-9496-9D5CEDCAE2ED}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
