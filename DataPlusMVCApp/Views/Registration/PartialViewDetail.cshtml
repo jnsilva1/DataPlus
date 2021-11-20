@@ -1,4 +1,6 @@
-﻿
+﻿@using System.Linq;
+@model CadastroPessoaFisica.Pessoa
+
 <form name="Registration" id="Registration">
     <ul class="nav nav-tabs border-bottom-0 bg-dark border border-primary font-weight-bold" role="tablist">
         <li class="nav-item" role="presentation">
@@ -19,13 +21,15 @@
                         <div class="col-12 col-md-8">
                             <div class="form-group">
                                 <label for="Nome">Nome</label>
-                                @Html.TextBox("Nome", "", new { maxlength = "256", required = "required", @class = "form-control" })
+                                @Html.TextBox("Nome", Model.Nome, new { maxlength = "256", required = "required", @class = "form-control" })
                             </div>
                         </div>
                         <div class="col-12 col-md-4">
                             <div class="form-group">
                                 <label for="Cpf">CPF</label>
-                                @Html.TextBox("Cpf", "", new { maxlength = "15", required = "required", @class = "form-control" })
+                                @*//Alterei para input direto do html sem razor, pois não estava obedecendo o padLeft, ficava como se nunca tivesse alterado. Estranho, mas a própria aplicação estava salvando cache do código!*@
+                                @*@Html.TextBox("Cpf", (Model.Cpf == 0 ? "" : Model.Cpf.ToString().PadLeft(11,'0')), new { maxlength = "15", required = "required", @class = "form-control" })*@
+                                <input type="text" id="Cpf" name="Cpf" class="form-control" required maxlength="15" value="@Html.Raw((Model.Cpf == 0 ? "" : Model.Cpf.ToString().PadLeft(11,'0')))"/>
                             </div>
                         </div>
                     </div>
@@ -41,13 +45,13 @@
                         <div class="col-12 col-md-9">
                             <div class="form-group">
                                 <label for="Endereco_Logradouro">Logradouro</label>
-                                @Html.TextBox("Endereco_Logradouro", "", new { maxlength = "256", required = "required", @class = "form-control" })
+                                @Html.TextBox("Endereco_Logradouro", Model.Endereco.Logradouro, new { maxlength = "256", required = "required", @class = "form-control" })
                             </div>
                         </div>
                         <div class="col-12 col-md-3">
                             <div class="form-group">
                                 <label for="Endereco_Numero">Número</label>
-                                @Html.TextBox("Endereco_Numero", "", new { type = "number", @class = "form-control" })
+                                @Html.TextBox("Endereco_Numero",Model.Endereco.Numero == 0 ? "" : Model.Endereco.Numero.ToString(), new { type = "number", @class = "form-control" })
                             </div>
                         </div>
                     </div>
@@ -55,25 +59,25 @@
                         <div class="col-12 col-md-2">
                             <div class="form-group">
                                 <label for="Endereco_Cep">CEP</label>
-                                @Html.TextBox("Endereco_Cep", "", new { maxlength = "30", required = "required", @class = "form-control" })
+                                @Html.TextBox("Endereco_Cep", Model.Endereco.Cep == 0 ? "" : Model.Endereco.Cep.ToString("0".PadLeft(8,'0')), new { maxlength = "30", required = "required", @class = "form-control" })
                             </div>
                         </div>
                         <div class="col-12 col-md-4">
                             <div class="form-group">
                                 <label for="Endereco_Bairro">Bairro</label>
-                                @Html.TextBox("Endereco_Bairro", "", new { maxlength = "50", required = "required", @class = "form-control" })
+                                @Html.TextBox("Endereco_Bairro", Model.Endereco.Bairro, new { maxlength = "50", required = "required", @class = "form-control" })
                             </div>
                         </div>
                         <div class="col-12 col-md-3">
                             <div class="form-group">
                                 <label for="Endereco_Cidade">Cidade</label>
-                                @Html.TextBox("Endereco_Cidade", "", new { maxlength = "30", required = "required", @class = "form-control" })
+                                @Html.TextBox("Endereco_Cidade", Model.Endereco.Cidade, new { maxlength = "30", required = "required", @class = "form-control" })
                             </div>
                         </div>
                         <div class="col-12 col-md-3">
                             <div class="form-group">
                                 <label for="Endereco_Estado">Estado</label>
-                                @Html.DropDownList("Endereco_Estado", DataPlusMVCApp.Controllers.RegistrationController.GetStates().Select(v => new SelectListItem { Selected = false, Text = v, Value = v }), new { @class = "custom-select" })
+                                @Html.DropDownList("Endereco_Estado", DataPlusMVCApp.Controllers.RegistrationController.GetStates().Select(v => new SelectListItem { Selected = (Model.Endereco.Estado ?? "").ToUpper() == v.ToUpper(), Text = v, Value = v }), new { @class = "custom-select" })
                             </div>
                         </div>
                     </div>
@@ -115,21 +119,35 @@
                         <div class="col-12">
                             <table id="phoneList" class="table table-hover table-bordered">
                                 <thead>
-                                    @*<tr>
+                                    @if (Model.Telefones.Count > 0)
+                                    {
+                                        <tr>
                                             <th scope="col">DDD</th>
                                             <th scope="col">Número</th>
                                             <th scope="col">Tipo</th>
                                             <th scope="col"></th>
-                                        </tr>*@
+                                        </tr>
+                                    }
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td colspan="4">Nenhum telefone foi adicionado...</td>
-                                        @*<td>11</td>
-                                            <td>963690832</td>
-                                            <td>Celular</td>
-                                            <td class="d-flex justify-content-center"><button type="button" class="btn btn-danger btn-remove-phone btn-times" title="Remover"><i class="fa fa-times"></i></button></td>*@
-                                    </tr>
+                                    @if (Model.Telefones.Count == 0)
+                                    {
+                                        <tr>
+                                            <td colspan="4">Nenhum telefone foi adicionado...</td>
+                                        </tr>
+                                    }
+                                    else
+                                    {
+                                        foreach(var telefone in Model.Telefones)
+                                        {
+                                            <tr>
+                                                <td data-ddd>@Html.Raw(telefone.Ddd)</td>
+                                                <td data-numero>@Html.Raw(telefone.Numero)</td>
+                                                <td data-tipo>@Html.Raw(telefone.Tipo.Tipo)</td>
+                                                <td class="d-flex justify-content-center"><button type="button" class="btn btn-danger btn-remove-phone btn-times" title="Remover"><i class="fa fa-times"></i></button></td>
+                                            </tr>
+                                        }
+                                    }
                                 </tbody>
                             </table>
                         </div>
@@ -144,7 +162,7 @@
                                 <button id="btnSave" type="button" formaction="Save" class="btn btn-primary font-weight-bold">
                                     <i class="fa fa-save"></i> Gravar
                                 </button>
-                                <button id="btnClean" type="reset" class="btn btn-primary font-weight-bold">
+                                <button id="btnClean" type="button" class="btn btn-primary font-weight-bold">
                                     <i class="fa fa-file"></i> Limpar
                                 </button>
                                 <button id="btnDelete" type="button" formaction="Delete" class="btn btn-danger font-weight-bold">

@@ -28,6 +28,27 @@ namespace DataPlusMVCApp
 
             bundles.Add(new ScriptBundle("~/bundles/inputmask").Include(
             "~/Scripts/inputmask/jquery.inputmask.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/blockui").Include(
+            "~/Scripts/jquery.blockUI.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/noty")
+                .Include("~/Scripts/noty/jquery.noty.js")
+                .Include("~/Scripts/noty/themes/default.js")
+                .Include("~/Scripts/noty/themes/relax.js")
+                .Include("~/Scripts/noty/themes/bootstrap.js")
+                .Include("~/Scripts/noty/layouts/bottom.js")
+                .Include("~/Scripts/noty/layouts/bottomCenter.js")
+                .Include("~/Scripts/noty/layouts/bottomLeft.js")
+                .Include("~/Scripts/noty/layouts/bottomRight.js")
+                .Include("~/Scripts/noty/layouts/center.js")
+                .Include("~/Scripts/noty/layouts/centerLeft.js")
+                .Include("~/Scripts/noty/layouts/centerRight.js")
+                .Include("~/Scripts/noty/layouts/inline.js")
+                .Include("~/Scripts/noty/layouts/top.js")
+                .Include("~/Scripts/noty/layouts/topCenter.js")
+                .Include("~/Scripts/noty/layouts/topLeft.js")
+                .Include("~/Scripts/noty/layouts/topRight.js"));
         }
     }
 }

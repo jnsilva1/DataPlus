@@ -24,3 +24,17 @@ $.fn.validateForm = function validateForm(showMessage) {
     }
     return true;
 };
+
+//Over write blockUI
+$(function () {
+    $.blockUI.defaults.css = $.extend(true, {}, $.blockUI.defaults.css, {
+        border: 'none',
+        padding: '15px',
+        backgroundColor: '#000',
+        '-webkit-border-radius': '10px',
+        '-moz-border-radius': '10px',
+        opacity: .5,
+        color: '#fff'
+    });
+    $.blockUI.defaults.message = '<div class="d-flex justify-content-center"><div class="spinner-border text-primary" role="status"><span class="sr-only"></span></div><div><span class="ml-3 align-middle">Carregando...</span></div></div>';
+});

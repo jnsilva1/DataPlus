@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CadastroPessoaFisica;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -16,6 +17,7 @@ namespace DataPlusMVCApp
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+            ConnectionSettings.SetConnectionString(connectionString: System.Configuration.ConfigurationManager.ConnectionStrings["DEFAULT"].ConnectionString);
         }
     }
 }

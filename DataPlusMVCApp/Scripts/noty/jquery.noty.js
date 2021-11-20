@@ -501,7 +501,7 @@
             easing: 'swing',
             speed : 500
         },
-        timeout     : false,
+        timeout     : 10000,
         force       : false,
         modal       : false,
         maxVisible  : 5,

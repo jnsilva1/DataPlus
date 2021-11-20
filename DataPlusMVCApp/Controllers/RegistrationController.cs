@@ -1,17 +1,20 @@
-﻿using System;
+﻿using CadastroPessoaFisica;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
+using Newtonsoft.Json;
 
 namespace DataPlusMVCApp.Controllers
 {
     public class RegistrationController : Controller
     {
         // GET: Registration
-        public ActionResult Index()
+        public ActionResult Index(long? cpf = null)
         {
-            return View();
+            return View(cpf);
         }
 
         // GET: Registration/Details/5
@@ -26,69 +29,78 @@ namespace DataPlusMVCApp.Controllers
             return View();
         }
 
-        public PartialViewResult PartialViewDetail()
+        public PartialViewResult PartialViewDetail(long? cpf = null)
         {
-            return PartialView();
+            Pessoa pessoa = PessoaDAO.Consulte(cpf: cpf ?? 0) ?? new Pessoa();
+            if (pessoa.Endereco == null) pessoa.Endereco = new Endereco();
+            if (pessoa.Telefones == null) pessoa.Telefones = new HashSet<Telefone>();
+            return PartialView(model: pessoa);
         }
 
-        // POST: Registration/Create
         [HttpPost]
-        public ActionResult Create(FormCollection collection)
+        public JsonResult Save(string pessoaJson)
         {
             try
             {
-                // TODO: Add insert logic here
+                //Tentei receber o objeto por parâmetro mas não funcionou, para agilizar o tempo então passei a receber por string para deserializar
+                Pessoa pessoaAtualizacao = JsonConvert.DeserializeObject<Pessoa>(pessoaJson),
+                    pessoa = PessoaDAO.Consulte(cpf: pessoaAtualizacao.Cpf);//Verifico se existe a pessoa que estou tentando cadastras
 
-                return RedirectToAction("Index");
+                bool sucesso;
+
+                if (pessoa == null)
+                {//Utilizo a nova pessoa que já está populada
+                    sucesso = PessoaDAO.Insira(p: pessoaAtualizacao);
+                }
+                else
+                {
+                    //Atualizo as informações da pessoa aqui
+                    pessoa.Nome = pessoaAtualizacao.Nome;
+                    if(pessoa.Endereco.Equals(pessoaAtualizacao.Endereco) == false)
+                    {
+                        pessoa.Endereco = pessoaAtualizacao.Endereco;
+                    }
+                    pessoa.Telefones = pessoaAtualizacao.Telefones;
+                    sucesso = PessoaDAO.Altere(p: pessoa);
+                }
+                if(sucesso)
+                    return Json(data: new { type="success", text="Alterações gravadas com sucesso!"}, behavior: JsonRequestBehavior.AllowGet);
+                else
+                    return Json(data: new { type="warning", text="Ocorreu um erro inesperado ao gravar as alterações."}, behavior: JsonRequestBehavior.AllowGet);
+
             }
-            catch
+            catch(Exception e)
             {
-                return View();
+                return Json(data: new { type = "error", text = e.Message }, behavior: JsonRequestBehavior.AllowGet);
             }
         }
 
-        // GET: Registration/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
-
-        // POST: Registration/Edit/5
+        // POST: Registration/Delete
         [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
+        public JsonResult Delete(long cpf)
         {
             try
             {
-                // TODO: Add update logic here
+                Pessoa pessoa = null;
+                if ((pessoa = PessoaDAO.Consulte(cpf: cpf)) == null)
+                {
+                    return Json(data: new { type = "warning", text = "Registro não encontrado!" }, behavior: JsonRequestBehavior.AllowGet);
+                }
 
-                return RedirectToAction("Index");
+                if(PessoaDAO.Exclua(p: pessoa))
+                    return Json(data: new { type = "success", text = "Registro excluído com sucesso!" }, behavior: JsonRequestBehavior.AllowGet);
+                else
+                    return Json(data: new { type = "warning", text = "Ocorreu um erro ao tentar excluir o registro." }, behavior: JsonRequestBehavior.AllowGet);
             }
-            catch
+            catch(Exception e)
             {
-                return View();
+                return Json(data: new { type = "error", text = e.Message }, behavior: JsonRequestBehavior.AllowGet);
             }
         }
 
-        // GET: Registration/Delete/5
-        public ActionResult Delete(int id)
+        public JsonResult Find(long cpf)
         {
-            return View();
-        }
-
-        // POST: Registration/Delete/5
-        [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add delete logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
+            return Json(PessoaDAO.Consulte(cpf) ?? new Pessoa { Cpf = cpf }, JsonRequestBehavior.AllowGet);
         }
 
         public static List<string> GetStates()
@@ -122,5 +134,19 @@ namespace DataPlusMVCApp.Controllers
                 ,"Sergipe"
                 ,"Tocantins"
             }.OrderBy(es => es).ToList();
+
+        protected override JsonResult Json(object data, string contentType,
+            Encoding contentEncoding, JsonRequestBehavior behavior)
+        {
+            return new JsonResult()
+            {
+                Data = data,
+                ContentType = contentType,
+                ContentEncoding = contentEncoding,
+                JsonRequestBehavior = behavior,
+                MaxJsonLength = int.MaxValue
+            };
+        }
+
     }
 }

@@ -1,6 +1,6 @@
-﻿
+﻿@model Nullable<long>
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-@Html.Action("PartialViewDetail")
+@Html.Action("PartialViewDetail", new { cpf = Model})

@@ -11,23 +11,12 @@
     @Scripts.Render("~/bundles/inputmask")
     @Scripts.Render("~/bundles/jqueryval")
     @Scripts.Render("~/bundles/bootstrap")
-    <script type="text/javascript" src="@Url.Content("~/Scripts/noty/jquery.noty.js?vs="+Guid.NewGuid())"></script>
+    @Scripts.Render("~/bundles/blockui")
+    @Scripts.Render("~/bundles/noty")
     <script type="text/javascript" src="@Url.Content("~/Scripts/util/util.js?vs="+Guid.NewGuid())"></script>
-    <script type="text/javascript" src="@Url.Content("~/Scripts/noty/themes/default.js?vs="+Guid.NewGuid())"></script>
-    <script type="text/javascript" src="@Url.Content("~/Scripts/noty/themes/relax.js?vs="+Guid.NewGuid())"></script>
-    <script type="text/javascript" src="@Url.Content("~/Scripts/noty/themes/bootstrap.js?vs="+Guid.NewGuid())"></script>
-    <script type="text/javascript" src="@Url.Content("~/Scripts/noty/layouts/bottom.js?vs="+Guid.NewGuid())"></script>
-    <script type="text/javascript" src="@Url.Content("~/Scripts/noty/layouts/bottomCenter.js?vs="+Guid.NewGuid())"></script>
-    <script type="text/javascript" src="@Url.Content("~/Scripts/noty/layouts/bottomLeft.js?vs="+Guid.NewGuid())"></script>
-    <script type="text/javascript" src="@Url.Content("~/Scripts/noty/layouts/bottomRight.js?vs="+Guid.NewGuid())"></script>
-    <script type="text/javascript" src="@Url.Content("~/Scripts/noty/layouts/center.js?vs="+Guid.NewGuid())"></script>
-    <script type="text/javascript" src="@Url.Content("~/Scripts/noty/layouts/centerLeft.js?vs="+Guid.NewGuid())"></script>
-    <script type="text/javascript" src="@Url.Content("~/Scripts/noty/layouts/centerRight.js?vs="+Guid.NewGuid())"></script>
-    <script type="text/javascript" src="@Url.Content("~/Scripts/noty/layouts/inline.js?vs="+Guid.NewGuid())"></script>
-    <script type="text/javascript" src="@Url.Content("~/Scripts/noty/layouts/top.js?vs="+Guid.NewGuid())"></script>
-    <script type="text/javascript" src="@Url.Content("~/Scripts/noty/layouts/topCenter.js?vs="+Guid.NewGuid())"></script>
-    <script type="text/javascript" src="@Url.Content("~/Scripts/noty/layouts/topLeft.js?vs="+Guid.NewGuid())"></script>
-    <script type="text/javascript" src="@Url.Content("~/Scripts/noty/layouts/topRight.js?vs="+Guid.NewGuid())"></script>
+    <script type="text/javascript">
+        var rootPath = '@Url.Content("~/")';
+    </script>
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark ">
