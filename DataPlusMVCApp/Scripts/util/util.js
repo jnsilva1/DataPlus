@@ -17,7 +17,7 @@ $.fn.validateForm = function validateForm(showMessage) {
         });
 
         if (showMessage && isValid == false) {
-            noty({ type: 'warning', layout: 'center', closeWith: ['click'], text: notyMessage, template: '<div class="noty_message text-left pl-3"><span class="noty_text"></span><div class="noty_close"></div></div>' });
+            noty({ type: 'warning', modal:true, layout: 'center', closeWith: ['click'], text: notyMessage, template: '<div class="noty_message text-left pl-3"><span class="noty_text"></span><div class="noty_close"></div></div>' });
         }
 
         return isValid;

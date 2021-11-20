@@ -107,7 +107,7 @@
                 });
 
             } else {
-                noty({ text: 'Selecione um registro para excluir', type: 'warning', layout: 'topRight', closeWith: ['click'] });
+                noty({ text: 'Selecione um registro para excluir', modal: true, type: 'warning', layout: 'topRight', closeWith: ['click'] });
                 $(document.Registration).data('validator').resetForm();
             }
             $(document.Registration).find('[required]').removeClass('ignore');
@@ -134,6 +134,7 @@
     function FindByCPF(cpf) {
         $(document.Registration.btnClean).click();
         if ($.trim(cpf)) {
+            $(document.Registration).find('#Cpf').val($.trim(cpf).padStart(11, '0')).keypress();
             $.blockUI();
             $.ajax({
                 url: rootPath + 'Registration/Find',
@@ -215,7 +216,7 @@
                 type: 'POST',
                 data: JSON.stringify({ pessoaJson: pessoa }),
                 success: function (res) {
-                    noty($.extend(true, res, { closeWith: ['click'], layout: 'topRight' }));
+                    noty($.extend(true, res, {closeWith: ['click'], layout: 'topRight'}));
                     if (res["type"] == "success")
                         QuestionUserWantCleanForm();
                 },
